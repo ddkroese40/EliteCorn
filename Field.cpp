@@ -17,7 +17,6 @@ int Field::countVisiblePlantsFromOutside() const {
     int cols = static_cast<int>(grid[0].size());
     int visibleCount = 2 * (rows + cols - 2); // Count outer edge plants
 
-    // Create a vector to track visibility of inner plants
     std::vector<std::vector<bool>> isVisible(rows, std::vector<bool>(cols, false));
 
     // Mark visibility from the left and right sides
@@ -26,16 +25,14 @@ int Field::countVisiblePlantsFromOutside() const {
         int maxHeightRight = grid[i][cols - 1];
 
         for (int j = 1; j < cols - 1; ++j) {
-            // From the left
             if (grid[i][j] > maxHeightLeft) {
                 maxHeightLeft = grid[i][j];
-                isVisible[i][j] = true; // Mark visible
+                isVisible[i][j] = true;
             }
 
-            // From the right
             if (grid[i][(cols - j) - 1] > maxHeightRight) {
                 maxHeightRight = grid[i][(cols - j) - 1];
-                isVisible[i][(cols - j) - 1] = true; // Mark visible
+                isVisible[i][(cols - j) - 1] = true;
             }
         }
     }
@@ -46,16 +43,14 @@ int Field::countVisiblePlantsFromOutside() const {
         int maxHeightBottom = grid[rows - 1][j];
 
         for (int i = 1; i < rows - 1; ++i) {
-            // From the top
             if (grid[i][j] > maxHeightTop) {
                 maxHeightTop = grid[i][j];
-                isVisible[i][j] = true; // Mark visible
+                isVisible[i][j] = true;
             }
 
-            // From the bottom
             if (grid[(rows - i) - 1][j] > maxHeightBottom) {
                 maxHeightBottom = grid[(rows - i) - 1][j];
-                isVisible[(rows - i) - 1][j] = true; // Mark visible
+                isVisible[(rows - i) - 1][j] = true;
             }
         }
     }
@@ -81,7 +76,7 @@ void Field::CalculateScores() {
     for (int i = 0; i < rows; ++i) {
         for (int j = 0; j < cols; ++j) {
             if (grid[i][j] == 0) {
-                continue; // Skip edge plants
+                continue;
             }
 
             // Calculate seeing distances
@@ -98,7 +93,7 @@ void Field::CalculateScores() {
                     break;
                 }
             }
-            
+
             // Left
             for (int k = j - 1; k >= 0; --k) {
                 if (grid[i][k] < grid[i][j]) {
@@ -138,19 +133,18 @@ void Field::CalculateScores() {
     }
 }
 
-PlantScore Field::CurrentElitePlant() const {
-    PlantScore elitePlant = {0, 0, 0, 0}; // Initialize with default values
+std::pair<int, std::pair<int, int>> Field::getHighestScoreAndLocation() const {
     int maxScore = 0;
+    std::pair<int, int> location = {0, 0};
 
-    // Find the plant with the highest score
     for (int i = 0; i < score_map.size(); ++i) {
         for (int j = 0; j < score_map[i].size(); ++j) {
             if (score_map[i][j] > maxScore) {
                 maxScore = score_map[i][j];
-                elitePlant = {i, j, maxScore, grid[i][j]};
+                location = {i, j};
             }
         }
     }
-
-    return elitePlant;
+    return {maxScore, location};
 }
+
