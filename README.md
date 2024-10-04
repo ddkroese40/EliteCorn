@@ -18,4 +18,4 @@ Please create a new repository of your own that contains your solution code and 
 8. click the play button to run the application.
 9. you can change the filepath if you'd like and press " 
 
-![EliteCorn Demo](./EliteCorn Demo.gif)
+![EliteCorn Demo](./EliteCorn_Demo.gif)
